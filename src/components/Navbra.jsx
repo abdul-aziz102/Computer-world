@@ -212,7 +212,7 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14">
-            {/* Logo with enhanced animation */}
+            {/* Logo with enhanced animation - CORRECTED */}
             <Link
               to="/"
               className="flex items-center space-x-3 group relative"
@@ -228,27 +228,16 @@ const Navbar = () => {
                       : "scale-0 opacity-0"
                   }`}
                 ></div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`relative h-8 w-8 text-blue-600 transition-all duration-300 ${
+                {/* Replace SVG with img tag */}
+                <img 
+                  src="/Cwicon.jpeg" 
+                  alt="Computer World Logo"
+                  className={`relative h-15 w-15 transition-all duration-300 ${
                     activeHover === "logo"
-                      ? "scale-125 rotate-12 text-blue-700"
+                      ? "scale-125 rotate-12"
                       : "scale-100 rotate-0"
                   }`}
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M2 12h20" />
-                  <path d="M12 2a15.3 15.3 0 0 1 0 20" />
-                  <path d="M12 2a15.3 15.3 0 0 0 0 20" />
-                  <path d="M9 9l-2 2 2 2" />
-                  <path d="M15 9l2 2-2 2" />
-                </svg>
+                />
               </div>
               <span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 Computer World
