@@ -98,10 +98,11 @@ const FeaturedCourses = () => {
                   <div className="text-lg font-bold text-gray-900">
                     Free Access
                   </div>
-
+                  <Link to='/enroll'>
                   <div className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg text-sm hover:bg-blue-100 transition">
                     Enroll Now
                   </div>
+                  </Link>
                 </div>
               </div>
 

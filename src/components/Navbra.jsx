@@ -230,7 +230,7 @@ const Navbar = () => {
                 ></div>
                 {/* Replace SVG with img tag */}
                 <img 
-                  src="/Cwicon.jpeg" 
+                  src="/Cwicon.png" 
                   alt="Computer World Logo"
                   className={`relative h-15 w-15 transition-all duration-300 ${
                     activeHover === "logo"

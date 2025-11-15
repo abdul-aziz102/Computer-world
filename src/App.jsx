@@ -11,15 +11,16 @@ import Html from './pages/Html'
 import CssQuiz from './pages/Css'
 import Js from './pages/JS'
 import ExcelQuiz from './pages/ExcelQuiz'
-import GraphicDesignQuiz from './pages/GraphicDesignQuiz'
 import Enroll from './pages/Enroll'
 import ResultPage from './pages/Resultpage'
+import ChatbotWidget from './components/ChatbotWidget'
 
 const App = () => {
   return (
     <div className='mt-10'>
       <Router>
        <Navbar />
+       <ChatbotWidget/>
         <Routes> {/* Added Routes wrapper */}
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />

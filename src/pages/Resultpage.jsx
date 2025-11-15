@@ -137,13 +137,13 @@ const ResultPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 mt-20 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
           {/* Header Section */}
           <div className="bg-indigo-700 p-6 text-center relative">
             <div className="absolute top-4 left-4">
-              <img src="/home.png" alt="Home Academy Logo" className="h-12" />
+              <img src="/Cwicon.png" alt="Home Academy Logo" className="h-20 w-20 bg-white rounded-full" />
             </div>
             <h1 className="text-3xl font-bold text-white mt-4">Registration Confirmation</h1>
             <p className="text-indigo-200 mt-2">Your learning journey starts here</p>
@@ -168,7 +168,7 @@ const ResultPage = () => {
                   <div className="flex items-center">
                     <FaBook className="text-indigo-500 mr-3" />
                     <div>
-                      <p className="text-sm text-gray-500">Course Level</p>
+                      <p className="text-sm text-gray-500">Course</p>
                       <p className="font-medium">{state.level}</p>
                     </div>
                   </div>
