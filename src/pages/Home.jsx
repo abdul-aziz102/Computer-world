@@ -3,7 +3,7 @@ import HeroBanner from '../components/Herobanner'
 import CoursesSection from '../components/CoursesSection'
 import FeaturedCourses from '../components/FeaturedCourses'
 import LearningPath from '../components/LearningPath'
-import FeaturesShowcase from '../components/FeaturesShowcase.JSX'
+import Showcase from '../components/Showcase'
 
 const Home = () => {
   return (
@@ -12,7 +12,7 @@ const Home = () => {
         <CoursesSection/>
         <FeaturedCourses />
         <LearningPath />
-      <FeaturesShowcase/>
+        <Showcase/>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
-const FeaturesShowcase = () => {
+const Showcase = () => {
   const [activeFeature, setActiveFeature] = useState(0);
 
   const features = [
@@ -192,4 +192,4 @@ const FeaturesShowcase = () => {
   );
 };
 
-export default FeaturesShowcase;
+export default Showcase;
