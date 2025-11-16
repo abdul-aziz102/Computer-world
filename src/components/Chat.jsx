@@ -58,6 +58,8 @@ Contact Information:
 4. Always end with a call-to-action but keep it brief
 5. Use emojis to make responses engaging
 6. Maximum 3-4 bullet points per response
+registration process:
+- click on Enroll Now button on top right corner and fill the form and submit it and dowanload the form after submitting and give it to us in the center.
 `;
 
   // Enhanced message formatting

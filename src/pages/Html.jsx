@@ -1,6 +1,23 @@
 import React, { useState } from "react";
 
 export default function HtmlQuiz() {
+  // Access State
+  const [access, setAccess] = useState(false);
+  const [form, setForm] = useState({ name: "", password: "" });
+
+  // Correct Password
+  const correctPassword = "web123";
+
+  const handleAccessSubmit = (e) => {
+    e.preventDefault();
+    if (form.password === correctPassword) {
+      setAccess(true);
+    } else {
+      alert("Incorrect password! Sirf Web Developer student ko pata hota hai.");
+    }
+  };
+
+  //---------------- QUIZ CODE ----------------//
   const questions = [
     { question: "What does HTML stand for?", options: ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyper Text Markup Leveler"], answer: "Hyper Text Markup Language" },
     { question: "Which tag is used to create a hyperlink?", options: ["<a>", "<link>", "<href>", "<hyper>"], answer: "<a>" },
@@ -59,6 +76,38 @@ export default function HtmlQuiz() {
 
   const progress = ((current + 1) / questions.length) * 100;
 
+  // If not allowed — show access form
+  if (!access) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
+        <form
+          onSubmit={handleAccessSubmit}
+          className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-200"
+        >
+          <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
+            Student Access
+          </h2>
+
+         
+
+          <input
+            type="password"
+            placeholder="Enter Web Developer Password"
+            className="w-full p-3 mb-6 border rounded-xl"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+          />
+
+          <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">
+            Enter Quiz
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  // QUIZ UI (agar access mil gaya)
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl border border-gray-200">
@@ -67,7 +116,6 @@ export default function HtmlQuiz() {
 
         {!submitted ? (
           <>
-            {/* Progress Bar */}
             <div className="w-full bg-gray-200 h-2 rounded-full mb-5">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all"
@@ -75,12 +123,10 @@ export default function HtmlQuiz() {
               ></div>
             </div>
 
-            {/* Question */}
             <h2 className="text-lg font-semibold mb-4 text-gray-800">
               Q{current + 1}. {questions[current].question}
             </h2>
 
-            {/* Options */}
             <div className="flex flex-col gap-3">
               {questions[current].options.map((option, i) => (
                 <button
@@ -98,7 +144,6 @@ export default function HtmlQuiz() {
               ))}
             </div>
 
-            {/* Controls */}
             <div className="flex justify-between mt-6">
               <button
                 onClick={handlePrev}

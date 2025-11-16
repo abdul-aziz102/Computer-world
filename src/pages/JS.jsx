@@ -1,6 +1,21 @@
 import React, { useState } from "react";
 
 export default function Js() {
+  const correctPassword = "12345"; // CHANGE PASSWORD HERE
+
+  const [inputPassword, setInputPassword] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
+  const handlePasswordSubmit = () => {
+    if (inputPassword === correctPassword) {
+      setIsVerified(true);
+      setPasswordError("");
+    } else {
+      setPasswordError("Incorrect password");
+    }
+  };
+
   const questions = [
     { question: "Which keyword is used to declare a variable in JavaScript?", options: ["var", "let", "const", "All of the above"], answer: "All of the above" },
     { question: "What will typeof null return?", options: ["null", "object", "undefined", "number"], answer: "object" },
@@ -61,92 +76,118 @@ export default function Js() {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl border border-gray-200">
-        
-        <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">JavaScript Quiz</h1>
 
-        {!submitted ? (
-          <>
-            {/* Progress Bar */}
-            <div className="w-full bg-gray-200 h-2 rounded-full mb-5">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+      {/* PASSWORD SCREEN */}
+      {!isVerified && (
+        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-200">
+          <h2 className="text-2xl font-bold text-center mb-4 text-blue-600">Enter Password</h2>
 
-            {/* Question */}
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">
-              Q{current + 1}. {questions[current].question}
-            </h2>
+          <input
+            type="password"
+            placeholder="Enter quiz password"
+            value={inputPassword}
+            onChange={(e) => setInputPassword(e.target.value)}
+            className="w-full px-4 py-3 border rounded-xl mb-4"
+          />
 
-            {/* Options */}
-            <div className="flex flex-col gap-3">
-              {questions[current].options.map((option, i) => (
+          {passwordError && (
+            <p className="text-red-500 text-sm mb-3">{passwordError}</p>
+          )}
+
+          <button
+            onClick={handlePasswordSubmit}
+            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold"
+          >
+            Continue
+          </button>
+        </div>
+      )}
+
+      {/* QUIZ SCREEN */}
+      {isVerified && (
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl border border-gray-200">
+          
+          <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">JavaScript Quiz</h1>
+
+          {!submitted ? (
+            <>
+              <div className="w-full bg-gray-200 h-2 rounded-full mb-5">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+
+              <h2 className="text-lg font-semibold mb-4 text-gray-800">
+                Q{current + 1}. {questions[current].question}
+              </h2>
+
+              <div className="flex flex-col gap-3">
+                {questions[current].options.map((option, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSelect(option)}
+                    className={`px-4 py-3 rounded-xl text-left border transition-all duration-200
+                      ${
+                        selected[current] === option
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white hover:bg-blue-50 border-gray-300"
+                      }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex justify-between mt-6">
                 <button
-                  key={i}
-                  onClick={() => handleSelect(option)}
-                  className={`px-4 py-3 rounded-xl text-left border transition-all duration-200
+                  onClick={handlePrev}
+                  disabled={current === 0}
+                  className={`px-5 py-2 rounded-lg font-semibold transition
                     ${
-                      selected[current] === option
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white hover:bg-blue-50 border-gray-300"
+                      current === 0
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                     }`}
                 >
-                  {option}
+                  Previous
                 </button>
-              ))}
-            </div>
 
-            {/* Controls */}
-            <div className="flex justify-between mt-6">
+                {current === questions.length - 1 ? (
+                  <button
+                    onClick={handleSubmit}
+                    className="px-6 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleNext}
+                    className="px-6 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+                You scored{" "}
+                <span className="text-blue-600 font-bold">{score}</span> out of{" "}
+                {questions.length} 🎉
+              </h2>
+
               <button
-                onClick={handlePrev}
-                disabled={current === 0}
-                className={`px-5 py-2 rounded-lg font-semibold transition
-                  ${
-                    current === 0
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                  }`}
+                onClick={handleRestart}
+                className="mt-4 px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
               >
-                Previous
+                Restart Quiz
               </button>
-
-              {current === questions.length - 1 ? (
-                <button
-                  onClick={handleSubmit}
-                  className="px-6 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-                >
-                  Submit
-                </button>
-              ) : (
-                <button
-                  onClick={handleNext}
-                  className="px-6 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-                >
-                  Next
-                </button>
-              )}
             </div>
-          </>
-        ) : (
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              You scored{" "}
-              <span className="text-blue-600 font-bold">{score}</span> out of{" "}
-              {questions.length} 🎉
-            </h2>
-
-            <button
-              onClick={handleRestart}
-              className="mt-4 px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-            >
-              Restart Quiz
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

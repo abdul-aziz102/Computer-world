@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import { FaFilePdf, FaSignOutAlt } from "react-icons/fa";
@@ -9,8 +9,10 @@ const Navbar = () => {
   const [activeHover, setActiveHover] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
   const [registrationData, setRegistrationData] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   // Check registration status on component mount and storage changes
   useEffect(() => {
@@ -48,10 +50,27 @@ const Navbar = () => {
   // Close menu on escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape") setIsMenuOpen(false);
+      if (e.key === "Escape") {
+        setIsMenuOpen(false);
+        setIsDropdownOpen(false);
+      }
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const toggleMenu = () => {
@@ -62,11 +81,16 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("isRegistered");
     localStorage.removeItem("registrationData");
     setIsRegistered(false);
     setRegistrationData(null);
+    setIsDropdownOpen(false);
     navigate("/");
     closeMenu();
   };
@@ -186,6 +210,14 @@ const Navbar = () => {
     doc.save(`ComputerWorld_Registration_${registrationData.name || 'Student'}.pdf`);
   };
 
+  // Get user initial from email
+  const getUserInitial = () => {
+    if (registrationData?.email) {
+      return registrationData.email.charAt(0).toUpperCase();
+    }
+    return "U"; // Default to 'U' for User if no email
+  };
+
   const navLinks = [
     { href: "/", label: "Home", icon: "🏠" },
     { href: "/about", label: "About", icon: "ℹ️" },
@@ -212,7 +244,7 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14">
-            {/* Logo with enhanced animation - CORRECTED */}
+            {/* Logo with enhanced animation */}
             <Link
               to="/"
               className="flex items-center space-x-3 group relative"
@@ -228,7 +260,6 @@ const Navbar = () => {
                       : "scale-0 opacity-0"
                   }`}
                 ></div>
-                {/* Replace SVG with img tag */}
                 <img 
                   src="/Cwicon.png" 
                   alt="Computer World Logo"
@@ -304,16 +335,42 @@ const Navbar = () => {
                     </button>
                   </div>
 
-                  {/* Logout Button */}
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-pink-600 rounded-full blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse-slow"></div>
+                  {/* User Icon with Logout Option */}
+                  <div className="relative" ref={dropdownRef}>
                     <button
-                      onClick={handleLogout}
-                      className="relative inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-red-500/40 h-11 px-6 py-3 rounded-full shadow-lg shadow-red-500/30 border border-red-500/20"
+                      onClick={toggleDropdown}
+                      className="relative inline-flex items-center justify-center text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/40 h-11 w-11 rounded-full shadow-lg shadow-indigo-500/30 border border-indigo-500/20"
                     >
-                      <FaSignOutAlt className="w-4 h-4" />
-                      <span className="relative z-10">Logout</span>
+                      <span className="text-lg font-semibold">
+                        {getUserInitial()}
+                      </span>
                     </button>
+
+                    {/* Logout Option - Appears automatically when icon is clicked */}
+                    {isDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-purple-500/20 border border-white/20 overflow-hidden transform transition-all duration-300 z-50">
+                        <div className="p-2">
+                          {/* User Info */}
+                          <div className="px-3 py-2 border-b border-gray-100/50">
+                            <p className="text-sm font-semibold text-gray-800 truncate">
+                              {registrationData?.name || "User"}
+                            </p>
+                            <p className="text-xs text-gray-500 truncate">
+                              {registrationData?.email}
+                            </p>
+                          </div>
+                          
+                          {/* Logout Option */}
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 w-full px-3 py-3 text-sm font-medium text-red-600 hover:bg-red-50/80 rounded-xl transition-all duration-200 hover:scale-105"
+                          >
+                            <FaSignOutAlt className="w-4 h-4" />
+                            <span>Logout</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (
@@ -434,10 +491,9 @@ const Navbar = () => {
                   <span>Download PDF</span>
                 </button>
 
-                {/* Logout Button - Mobile */}
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center justify-center space-x-3 w-full px-6 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold rounded-2xl shadow-2xl shadow-red-500/40 hover:shadow-3xl hover:shadow-red-500/60 transform hover:scale-105 transition-all duration-300 border border-white/20"
+                {/* User Info and Logout - Mobile */}
+                <div 
+                  className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-4 border-2 border-indigo-100"
                   style={{
                     animationDelay: "600ms",
                     animation: isMenuOpen
@@ -445,9 +501,28 @@ const Navbar = () => {
                       : "none",
                   }}
                 >
-                  <FaSignOutAlt className="w-5 h-5" />
-                  <span>Logout</span>
-                </button>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {getUserInitial()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-800 truncate">
+                        {registrationData?.name || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {registrationData?.email}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-center space-x-3 w-full px-4 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold rounded-xl shadow-lg shadow-red-500/40 hover:shadow-xl hover:shadow-red-500/60 transform hover:scale-105 transition-all duration-300"
+                  >
+                    <FaSignOutAlt className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
               </>
             ) : (
               /* Enroll Now Button - Mobile (only show when not registered) */

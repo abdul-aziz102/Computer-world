@@ -8,7 +8,7 @@ import { FaRobot } from "react-icons/fa";
 // Enhanced AI Icon for Widget
 const EnhancedAIIcon = ({ size = 14, className = "" }) => (
   <motion.div
-    className={`w-${size} h-${size} bg-gradient-to-br from-purple-500 via-purple-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50 ${className}`}
+    className={`w-${size} h-${size} bg-linear-to-br from-purple-500 via-purple-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50 ${className}`}
     whileHover={{ scale: 1.1, rotate: 5 }}
     animate={{
       boxShadow: [
